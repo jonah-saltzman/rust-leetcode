@@ -18,7 +18,6 @@ impl Memo {
 
     fn set(&mut self, i: usize, cap: usize, val: usize) {
         self.vec[i][cap] = Some(val);
-        ()
     }
 
     fn get(&self, i: usize, cap: usize) -> Option<usize> {
