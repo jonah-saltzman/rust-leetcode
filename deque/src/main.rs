@@ -60,7 +60,7 @@ impl Deque {
         None
     }
 
-    fn push_rear(&mut self, val: i32) -> Result<(), &'static str> {
+    fn push_rear(&mut self, val: i32) -> Result<(), String> {
         if self.is_empty() {
             self.queue[0] = val;
             self.front = 0;
@@ -68,7 +68,7 @@ impl Deque {
             self.len = 1;
             return Ok(())
         }
-        if self.len >= self.cap { return Err("Full") }
+        if self.len >= self.cap { return Err("Full".to_owned()) }
         if self.rear == self.cap - 1 { self.rear = 0; } else { self.rear += 1; }
         self.queue[self.rear] = val;
         self.len += 1;
@@ -117,7 +117,7 @@ impl fmt::Display for Deque {
     }
 }
 
-fn main() -> Result<(), &'static str> {
+fn main() -> Result<(), String> {
     let mut my_queue = Deque::new(10);
     println!("{}", my_queue);
     my_queue.push_rear(1)?;
