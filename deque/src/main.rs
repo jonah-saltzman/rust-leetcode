@@ -1,5 +1,6 @@
 use core::fmt;
 
+#[derive(Debug)]
 struct Deque {
     queue: Vec<i32>,
     front: usize,
@@ -17,12 +18,54 @@ impl Deque {
         self.len == 0
     }
 
+    fn push_front(&mut self, val: i32) -> Result<(), &'static str> {
+        if self.is_empty() {
+            self.queue[0] = val;
+            self.front = 0;
+            self.rear = 0;
+            self.len = 1;
+            return Ok(())
+        }
+        if self.len >= self.cap { return Err("Full") }
+        if self.front == 0 {
+            self.front = self.cap - 1
+        } else {
+            self.front -= 1
+        }
+        self.queue[self.front] = val;
+        self.len += 1;
+        Ok(())
+    }
+
+    fn get_front(&self) -> Option<i32> {
+        if self.is_empty() { None }
+        else { Some(self.queue[self.front]) }
+    }
+
+    fn pop_front(&mut self) -> Option<i32> {
+        if let Some(v) = self.get_front() {
+            if self.len == 1 {
+                self.front = 0;
+                self.rear = 0;
+            } else {
+                if self.front >= self.cap - 1 {
+                    self.front = 0
+                } else {
+                    self.front += 1
+                }
+            }
+            self.len -= 1;
+            return Some(v)
+        }
+        None
+    }
+
     fn push_rear(&mut self, val: i32) -> Result<(), &'static str> {
         if self.is_empty() {
             self.queue[0] = val;
             self.front = 0;
             self.rear = 0;
-            self.len += 1;
+            self.len = 1;
             return Ok(())
         }
         if self.len >= self.cap { return Err("Full") }
@@ -81,7 +124,13 @@ fn main() -> Result<(), &'static str> {
     println!("{}", my_queue);
     my_queue.push_rear(2)?;
     println!("{}", my_queue);
-    println!("popped {:?}", my_queue.pop_rear());
+    println!("popped {:?} from rear", my_queue.pop_rear());
+    println!("{}", my_queue);
+    my_queue.push_front(3)?;
+    println!("{}", my_queue);
+    my_queue.push_front(4)?;
+    println!("{}", my_queue);
+    println!("popped {:?} from front", my_queue.pop_front());
     println!("{}", my_queue);
     Ok(())
 }
